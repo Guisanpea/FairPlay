@@ -4,6 +4,7 @@ val Specs2Version = "4.9.3"
 val LogbackVersion = "1.2.3"
 val TsecVersion = "0.2.0"
 val FuuidVersion = "0.3.0"
+val doobieVersion = "0.8.8"
 
 lazy val root = (project in file("."))
   .settings(
@@ -25,7 +26,10 @@ lazy val root = (project in file("."))
       "io.chrisdavenport" %% "fuuid-doobie" % FuuidVersion, // Doobie integration
       "io.github.jmcardon" %% "tsec-common" % TsecVersion,
       "io.github.jmcardon" %% "tsec-http4s" % TsecVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackVersion
+      "ch.qos.logback" % "logback-classic" % LogbackVersion,
+      "org.tpolecat" %% "doobie-core" % doobieVersion,
+      "org.tpolecat" %% "doobie-postgres" % doobieVersion,
+      "org.tpolecat" %% "doobie-specs2" % doobieVersion
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
     addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
@@ -39,3 +43,10 @@ scalacOptions ++= Seq(
   "-feature",
   "-Xfatal-warnings",
 )
+
+enablePlugins(FlywayPlugin)
+
+flywayUrl := "jdbc:postgresql://localhost:5432/postgres"
+flywayUser := "postgres"
+flywayPassword := "example"
+flywayLocations += "db/migration"
