@@ -4,7 +4,7 @@ val Specs2Version = "4.9.3"
 val LogbackVersion = "1.2.3"
 val TsecVersion = "0.2.0"
 val FuuidVersion = "0.3.0"
-val doobieVersion = "0.8.8"
+val doobieVersion = "0.9.0"
 
 lazy val root = (project in file("."))
   .settings(
@@ -19,6 +19,11 @@ lazy val root = (project in file("."))
       "org.http4s" %% "http4s-circe" % Http4sVersion,
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
       "io.circe" %% "circe-generic" % CirceVersion,
+      // Optional for auto-derivation of JSON codecs
+      "io.circe" %% "circe-generic" % CirceVersion,
+      // Optional for string interpolation to JSON model
+      "io.circe" %% "circe-literal" % CirceVersion,
+      "io.circe" % "circe-fs2_2.13" % CirceVersion,
       "org.specs2" %% "specs2-core" % Specs2Version % "test",
       "io.chrisdavenport" %% "fuuid" % FuuidVersion,
       "io.chrisdavenport" %% "fuuid-circe" % FuuidVersion, // Circe integration
@@ -29,7 +34,9 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "org.tpolecat" %% "doobie-core" % doobieVersion,
       "org.tpolecat" %% "doobie-postgres" % doobieVersion,
-      "org.tpolecat" %% "doobie-specs2" % doobieVersion
+      "org.tpolecat" %% "doobie-specs2" % doobieVersion,
+      "org.tpolecat" %% "doobie-quill" % doobieVersion,
+      "org.tpolecat" %% "doobie-hikari" % doobieVersion
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
     addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
@@ -41,12 +48,11 @@ scalacOptions ++= Seq(
   "-language:higherKinds",
   "-language:postfixOps",
   "-feature",
-  "-Xfatal-warnings",
 )
 
 enablePlugins(FlywayPlugin)
 
-flywayUrl := "jdbc:postgresql://localhost:5432/postgres"
+flywayUrl := "jdbc:postgresql://localhost:5432/fairplay"
 flywayUser := "postgres"
 flywayPassword := "example"
 flywayLocations += "db/migration"
