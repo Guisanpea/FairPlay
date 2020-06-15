@@ -5,6 +5,7 @@ val LogbackVersion = "1.2.3"
 val TsecVersion = "0.2.0"
 val FuuidVersion = "0.3.0"
 val doobieVersion = "0.9.0"
+val log4catsVersion = "1.1.1"
 
 lazy val root = (project in file("."))
   .settings(
@@ -36,7 +37,8 @@ lazy val root = (project in file("."))
       "org.tpolecat" %% "doobie-postgres" % doobieVersion,
       "org.tpolecat" %% "doobie-specs2" % doobieVersion,
       "org.tpolecat" %% "doobie-quill" % doobieVersion,
-      "org.tpolecat" %% "doobie-hikari" % doobieVersion
+      "org.tpolecat" %% "doobie-hikari" % doobieVersion,
+      "io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion,
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
     addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")

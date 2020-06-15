@@ -6,9 +6,10 @@ CREATE TABLE tennis_match
     winner  uuid REFERENCES player (id)
 );
 
-CREATE TABLE tennis_game
+CREATE TABLE tennis_set
 (
-    match_id uuid PRIMARY KEY REFERENCES tennis_match (id),
-    player1_games int,
-    player2_games int
+    match_id      uuid REFERENCES tennis_match (id),
+    set           int NOT NULL,
+    player1_games int NOT NULL,
+    player2_games int NOT NULL
 );

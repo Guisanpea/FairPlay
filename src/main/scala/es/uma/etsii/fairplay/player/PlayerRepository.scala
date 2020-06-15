@@ -3,14 +3,14 @@ package es.uma.etsii.fairplay.player
 import cats._
 import cats.implicits._
 import cats.effect.{Bracket, Sync}
+import doobie.implicits._
 import doobie.quill.DoobieContext
 import doobie.util.transactor.Transactor
 import io.chrisdavenport.fuuid.FUUID
+import io.circe.fs2._
 import io.getquill.{idiom => _, _}
-import doobie.implicits._
 import es.uma.etsii.fairplay.util.fuuid._
 import fs2.Stream
-import io.circe.fs2._
 
 final class PlayerRepository[F[_] : Sync : Monad] private(
   transactor: Transactor[F]

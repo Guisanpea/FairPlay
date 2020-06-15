@@ -1,18 +1,16 @@
 package es.uma.etsii.fairplay.player
 
-import cats._
 import cats.implicits._
-import cats.effect.{IO, Sync}
-import cats.{Applicative, Defer, Monad}
+import cats.effect.Sync
+import cats.{Defer, Monad}
+import es.uma.etsii.fairplay.json._
 import io.chrisdavenport.fuuid.http4s.FUUIDVar
+import io.circe.fs2
 import io.circe.syntax._
 import org.http4s.circe._
-import io.circe.generic.auto._
-import org.http4s.{HttpRoutes, MediaType, Status}
+import org.http4s.{HttpRoutes, MediaType}
 import org.http4s.dsl.Http4sDsl
-import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.server.Router
-import io.circe.fs2
 import org.http4s.headers.`Content-Type`
 
 class PlayerController[F[_] : Sync: Defer : Monad](

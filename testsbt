@@ -1,0 +1,23 @@
+import doobie._
+import doobie.implicits._
+import cats._
+import cats.effect._
+import cats.implicits._
+import doobie.util.ExecutionContexts
+
+implicit val cs = IO.contextShift(ExecutionContexts.synchronous)
+
+ import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
+ implicit val logger = Slf4jLogger.getLogger[IO]
+
+import es.uma.etsii.fairplay.`match`._
+
+val xa = Transactor.fromDriverManager[IO](
+     |   "org.postgresql.Driver",     // driver classname
+     |   "jdbc:postgresql:world",     // connect URL (driver-specific)
+     |   "postgres",
+     |   "example",
+     |   Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
+     | )
+
+ val mr = MatchRepository.make(xa).unsafeRunSync
