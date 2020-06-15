@@ -6,7 +6,4 @@ object Main extends IOApp {
   def run(args: List[String]): IO[ExitCode] =
     FairplayServer
       .stream[IO]
-      .compile
-      .drain
-      .as(ExitCode.Success)
 }
