@@ -21,17 +21,7 @@ final class MatchRepository[F[_] : Sync : Logger : Monad] private(
   import dctx._
 
   def findAll(): Stream[F, TennisMatch] =
-    stream(quote {
-      val tennisMatchQuery = querySchema[TennisMatchTable]("tennis_match")
-      for {
-        tMatch <- tennisMatchQuery.sortBy(_.id)
-        winner <- query[Player].leftJoin(w => tMatch.winner.contains(w.id))
-        player1 <- query[Player].join(_.id == tMatch.player1)
-        player2 <- query[Player].join(_.id == tMatch.player2)
-        sets <- querySchema[TennisSetTable]("tennis_set")
-          .join(_.matchId == tMatch.id)
-      } yield (tMatch, winner, player1, player2, sets)
-    })
+    stream(findAllMatches)
       .transact(transactor)
       .groupAdjacentBy(_._1.id)
       .map({ case (_, group) => group.toList })
@@ -43,6 +33,19 @@ final class MatchRepository[F[_] : Sync : Logger : Monad] private(
           )
       })
 
+
+  private def findAllMatches =
+    quote {
+      val tennisMatchQuery = querySchema[TennisMatchTable]("tennis_match")
+      for {
+        tMatch <- tennisMatchQuery.sortBy(_.id)
+        winner <- query[Player].leftJoin(w => tMatch.winner.contains(w.id))
+        player1 <- query[Player].join(_.id == tMatch.player1)
+        player2 <- query[Player].join(_.id == tMatch.player2)
+        sets <- querySchema[TennisSetTable]("tennis_set")
+          .join(_.matchId == tMatch.id)
+      } yield (tMatch, winner: Option[Player], player1, player2, sets)
+    }
 
   def findById(id: FUUID): F[Option[TennisMatch]] = {
     run(quote {

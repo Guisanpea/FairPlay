@@ -14,10 +14,6 @@ import org.http4s.{Request, Response}
 
 object FairplayController {
   private def httpApp[F[_] : Logger :ConcurrentEffect](client: Client[F], playerRepository: PlayerRepository[F], matchRepository: MatchRepository[F]): Kleisli[F, Request[F], Response[F]] = (
-    HelloWorldController.routes(HelloWorldService[F]())
-      <+>
-      JokesController.routes(JokesService[F](client))
-      <+>
       PlayerController(playerRepository).qualifiedRoutes
       <+>
       MatchController(matchRepository).qualifiedRoutes

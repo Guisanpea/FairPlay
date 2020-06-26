@@ -24,9 +24,10 @@ final class PlayerRepository[F[_] : Sync : Monad] private(
 
 
   def findPlayer(id: FUUID): F[Option[Player]] = {
-    run(quote {
+    val value: doobie.ConnectionIO[List[Player]] = run(quote {
       query[Player].filter(_.id == lift(id))
     })
+    value
       .transact(transactor)
       .map(q => q.headOption)
   }
