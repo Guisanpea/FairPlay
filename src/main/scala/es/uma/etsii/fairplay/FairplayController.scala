@@ -4,8 +4,6 @@ import cats.data.Kleisli
 import cats.effect.{ConcurrentEffect, Sync}
 import cats.implicits._
 import es.uma.etsii.fairplay.`match`.{MatchController, MatchRepository}
-import es.uma.etsii.fairplay.helloworld.{HelloWorldController, HelloWorldService}
-import es.uma.etsii.fairplay.jokes.{JokesController, JokesService}
 import es.uma.etsii.fairplay.player.{PlayerController, PlayerRepository}
 import io.chrisdavenport.log4cats.Logger
 import org.http4s.client.Client
