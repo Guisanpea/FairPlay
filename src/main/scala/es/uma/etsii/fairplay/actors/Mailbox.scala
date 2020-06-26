@@ -18,7 +18,9 @@ object Mailbox {
 
   type Mailbox[F[_], Input, Output] = Input => F[Output]
 
-  def apply[Output, Input, F[_] : Concurrent : Monad](
+  case object TimeoutException extends Throwable
+
+  def apply[Output, Input, F[_] : Concurrent : Monad ](
     queue: Queue[F, (Input, Deferred[F, Output])],
     receiver: Fiber[F, Unit],
     timeout: FiniteDuration = 0.seconds
@@ -37,9 +39,9 @@ object Mailbox {
       deferredResponse <- Deferred[F, Output]
       _ <- queue.offer1((input, deferredResponse))
       output <- (getTimeout race deferredResponse.get)
-        .map {
-          case Right(a) => Some(a)
-          case _ => F.raiseError(getTimeoutError)
+        .flatMap {
+          case Right(a) => F.pure(a)
+          case _ => F.raiseError[Output](getTimeoutError)
         }
     } yield (output)
   }

@@ -105,8 +105,9 @@ final class MatchRepository[F[_] : Sync : Logger : Monad] private(
       case (s, i) => TennisSetTable(s.player1Games, s.player2Games, i, id)
     }
     run(quote {
-      liftQuery(tennisSets).foreach(s => query[TennisSetTable].insert(s))
-    })
+      liftQuery(tennisSets).foreach(s =>
+        querySchema[TennisSetTable]("tennis_set").insert(s)
+      )})
       .transact(transactor)
   }
 }
